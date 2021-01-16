@@ -12,6 +12,8 @@ def toGray(img):
         sys.exit('ERROR image must be encoded as 3D: row, col, plane')
     return  np.dot(img[...,:3], [.299, .587, .114])
 
+
+#utilizes png image captured by Rasberry Pi Camera
 def GetGrayscale2D(label):
     with picamera.PiCamera() as camera:
         with picamera.array.PiRGBArray(camera) as output:
@@ -34,3 +36,14 @@ def GetGrayscale2D(label):
         
             orig_png_text = np.array(orig_image)
             return orig_image_gray
+
+
+#utilizes a png image
+def pngToGrayArray(png_img):   
+    img = Image.open(png_img)  
+    arrayForm = np.array(img)
+    grImageArray = toGray(arrayForm)
+    grImage = Image.fromarray(np.uint8(grImageArray), 'L')
+    grImage.save("_gray.png")
+    return grImageArray
+    

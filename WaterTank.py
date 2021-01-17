@@ -4,18 +4,38 @@ from skimage.measure import compare_ssim
 import argparse
 import imutils
 import cv2
+import time
+import picamera
 
+with picamera.PiCamera() as camera:
+    camera.resolution = (1024, 768)
+    camera.start_preview()
+    # Camera warm-up time
+    time.sleep(2)
+    camera.capture('first.jpg')
+
+print("First image done")
+time.sleep(2)
+
+
+with picamera.PiCamera() as camera:
+    camera.resolution = (1024, 768)
+    camera.start_preview()
+    # Camera warm-up time
+    time.sleep(2)
+    camera.capture('second.jpg')
+print("Second image done")
 # construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-f", "--first", required=True,
-	help="first input image")
-ap.add_argument("-s", "--second", required=True,
-	help="second input image")
-args = vars(ap.parse_args())
+#ap = argparse.ArgumentParser()
+#ap.add_argument("-f", "--first", required=True,
+#	help="first input image")
+#ap.add_argument("-s", "--second", required=True,
+#	help="second input image")
+#args = vars(ap.parse_args())
 
 # load the two input images
-imageA = cv2.imread(args["first"])
-imageB = cv2.imread(args["second"])
+imageA = cv2.imread('first.jpg')
+imageB = cv2.imread('second.jpg')
 # convert the images to grayscale
 grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
 grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)

@@ -1,5 +1,5 @@
 # Code from" https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
-
+# https://picamera.readthedocs.io/en/release-1.10/recipes1.html#capturing-to-an-opencv-object
 from skimage.measure import compare_ssim
 import argparse
 import imutils

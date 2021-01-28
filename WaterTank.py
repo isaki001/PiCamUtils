@@ -19,7 +19,10 @@ def capture_images():
     if debug: sys.stdout.write("images {}\n".format(images))
     for image in images:
         if ("snapshot" + str(count) + ".jpg") == image:
+            if debug: sys.stdout.write("matching image : {}\n".format(image))
             count += 1
+        else:
+            if debug: sys.stdout.write("not matching image : {}\n".format(image))
     test_image = "snapshot" + str(count) + ".jpg"
 
     if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images",test_image)))

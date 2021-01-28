@@ -11,7 +11,7 @@ import time
 from PIL import Image, ImageOps
 import cv2
 import numpy as np
-
+from skimage.measure import structural_similarity as ssim
 
 debug = True
 

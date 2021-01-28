@@ -16,10 +16,11 @@ def capture_images():
     images = os.listdir(os.path.join(os.getcwd(), "Images"))
     test_image = "snapshot.jpg"
     count = 0
+    if debug: sys.stdout.write("images {}\n".format(images))
     for image in images:
         if ("snapshot" + str(count) + ".jpg") == image:
             count += 1
-            test_image = "snapshot" + str(count) + ".jpg"
+    test_image = "snapshot" + str(count) + ".jpg"
 
     if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images",test_image)))
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))

@@ -19,13 +19,17 @@ def capture_images():
     count = 0
     for image in images:
         match = re.findall(r'\d+', image)
-        if match and int(match[0]) > count:
+        if debug: sys.stdout.write("digit from image: {}\n".format(match))
+        if match and int(match[0]) >= count:
             count = int(match[0]) + 1
 
     test_image = "snapshot" + str(count) + ".jpg"
 
+    camera.start_preview()
+    sleep(2)
     if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images", test_image)))
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
+    camera.stop_preview()
 
 '''
 if __name__ == "__main__":

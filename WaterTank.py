@@ -19,7 +19,7 @@ def capture_images():
             count += 1
     camera.capture(test_image)
 
-
+'''
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Raspberry Pi Water Tank Demo", prog="pi")
@@ -34,3 +34,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         parser.print_help()
+'''
+
+capture_images()

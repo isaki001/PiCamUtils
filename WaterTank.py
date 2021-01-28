@@ -6,6 +6,7 @@ import picamera
 import os
 import argparse
 import sys
+import re
 
 debug = True
 
@@ -14,18 +15,16 @@ def capture_images():
     if not os.path.exists(os.path.join(os.getcwd(), "Images")):
         os.mkdir(os.path.join(os.getcwd(), "Images"))
     images = os.listdir(os.path.join(os.getcwd(), "Images"))
-    test_image = "snapshot.jpg"
-    count = 0
     if debug: sys.stdout.write("images {}\n".format(images))
+    count = 0
     for image in images:
-        if ("snapshot" + str(count) + ".jpg") == image:
-            if debug: sys.stdout.write("matching image : {}\n".format(image))
-            count += 1
-        else:
-            if debug: sys.stdout.write("not matching image : {}\n".format(image))
+        match = re.findall(r'\d+', test_string)
+        if match[0] > count:
+            count = match[0] + 1
+
     test_image = "snapshot" + str(count) + ".jpg"
 
-    if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images",test_image)))
+    if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images", test_image)))
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
 
 '''

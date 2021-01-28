@@ -5,6 +5,9 @@
 import picamera
 import os
 import argparse
+import sys
+
+debug = True
 
 def capture_images():
     camera = picamera.PiCamera()
@@ -17,6 +20,7 @@ def capture_images():
         if test_image == image:
             test_image = "snapshot" + str(0) + ".jpg"
             count += 1
+    if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images",test_image))) 
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
 
 '''

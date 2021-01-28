@@ -66,10 +66,19 @@ def compare_two_images():
 
     b, g, r = cv2.split(difference)
     if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
-        print("Color images are completely Equal")
+        if debug: sys.stdout.write("Color images are completely Equal")
+    else:
+        if debug: sys.stdout.write("Color blue difference: {}\n".format(cv2.countNonZero(b)))
+        if debug: sys.stdout.write("Color green difference: {}\n".format(cv2.countNonZero(g)))
+        if debug: sys.stdout.write("Color red difference: {}\n".format(cv2.countNonZero(r)))
+
     b, g, r = cv2.split(difference_grey)
     if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
-        print("Greyscale images are completely Equal")
+        if debug: sys.stdout.write("Greyscale images are completely Equal")
+    else:
+        if debug: sys.stdout.write("Greyscale blue difference: {}\n".format(cv2.countNonZero(b)))
+        if debug: sys.stdout.write("Greyscale green difference: {}\n".format(cv2.countNonZero(g)))
+        if debug: sys.stdout.write("Greyscale red difference: {}\n".format(cv2.countNonZero(r)))
 
 '''
 if __name__ == "__main__":

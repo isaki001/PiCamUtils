@@ -33,7 +33,7 @@ def capture_images():
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
     camera.stop_preview()
 
-def convert_to_greyscale()
+def convert_to_greyscale():
     images = os.listdir(os.path.join(os.getcwd(), "Images"))
     for image in images:
         im1 = Image.open(os.path.join(os.getcwd(), "Images", image))

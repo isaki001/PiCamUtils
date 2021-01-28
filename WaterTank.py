@@ -17,7 +17,7 @@ def capture_images():
         if test_image == image:
             test_image = "snapshot" + str(0) + ".jpg"
             count += 1
-    camera.capture(test_image)
+    camera.capture(os.path.join(os.getcwd(), "Images",test_image))
 
 '''
 if __name__ == "__main__":

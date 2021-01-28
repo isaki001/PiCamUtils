@@ -9,6 +9,9 @@ import sys
 import re
 import time
 from PIL import Image, ImageOps
+import cv2
+import numpy as np
+
 
 debug = True
 
@@ -45,6 +48,29 @@ def convert_to_greyscale():
             im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + match[0] + ".jpg"))
         else:
             im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + ".jpg"))
+
+def compare_two_images():
+    original =  cv2.imread(os.path.join(os.getcwd(), "Images", "snapshot3.jpg"))
+    duplicate =  cv2.imread(os.path.join(os.getcwd(), "Images", "snapshot4.jpg"))
+
+    grey_original =  cv2.imread(os.path.join(os.getcwd(), "Images", "greyscale3.jpg"))
+    grey_duplicate =  cv2.imread(os.path.join(os.getcwd(), "Images", "greyscale4.jpg"))
+
+    if original.shape == duplicate.shape:
+        if debug: sys.stdout.write("Color images have same size and channels\n")
+    if grey_original.shape == grey_duplicate.shape:
+        if debug: sys.stdout.write("Greyscale images have same size and channels\n")
+
+    difference = cv2.subtract(original, duplicate)
+    difference_grey = cv2.subtract(grey_original, grey_duplicate)
+
+    b, g, r = cv2.split(difference)
+    if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
+        print("Color images are completely Equal")
+    b, g, r = cv2.split(difference_grey)
+    if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
+        print("Greyscale images are completely Equal")
+
 '''
 if __name__ == "__main__":
 
@@ -63,4 +89,5 @@ if __name__ == "__main__":
 '''
 
 # capture_images()
-convert_to_greyscale()
+# convert_to_greyscale()
+compare_two_images()

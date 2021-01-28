@@ -18,9 +18,9 @@ def capture_images():
     if debug: sys.stdout.write("images {}\n".format(images))
     count = 0
     for image in images:
-        match = re.findall(r'\d+', test_string)
-        if match[0] > count:
-            count = match[0] + 1
+        match = re.findall(r'\d+', image)
+        if int(match[0]) > count:
+            count = int(match[0]) + 1
 
     test_image = "snapshot" + str(count) + ".jpg"
 

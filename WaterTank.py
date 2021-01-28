@@ -19,7 +19,7 @@ def capture_images():
     count = 0
     for image in images:
         match = re.findall(r'\d+', image)
-        if int(match[0]) > count:
+        if match and int(match[0]) > count:
             count = int(match[0]) + 1
 
     test_image = "snapshot" + str(count) + ".jpg"

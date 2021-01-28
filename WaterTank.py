@@ -27,3 +27,10 @@ if __name__ == "__main__":
 
     deleted_parser = subparsers.add_parser("capture", help="Capture Images")
     deleted_parser.set_defaults(func=capture_images)
+
+    args = parser.parse_args()
+    try:
+        args.func(**vars(args))
+    except Exception as e:
+        print(e)
+        parser.print_help()

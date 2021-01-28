@@ -7,7 +7,7 @@ import os
 import argparse
 import sys
 import re
-
+import time
 debug = True
 
 def capture_images():
@@ -26,7 +26,7 @@ def capture_images():
     test_image = "snapshot" + str(count) + ".jpg"
 
     camera.start_preview()
-    sleep(2)
+    time.sleep(2)
     if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images", test_image)))
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
     camera.stop_preview()

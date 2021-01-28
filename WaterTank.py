@@ -8,6 +8,8 @@ import argparse
 import sys
 import re
 import time
+from PIL import Image, ImageOps
+
 debug = True
 
 def capture_images():
@@ -31,6 +33,18 @@ def capture_images():
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
     camera.stop_preview()
 
+def convert_to_greyscale()
+    images = os.listdir(os.path.join(os.getcwd(), "Images"))
+    for image in images:
+        im1 = Image.open(os.path.join(os.getcwd(), "Images", image))
+        # applying greyscale method
+        im2 = ImageOps.grayscale(im1)
+        im2.show()
+        match = re.findall(r'\d+', image)
+        if match:
+            im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + match[0] + ".jpg"))
+        else:
+            im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + ".jpg"))
 '''
 if __name__ == "__main__":
 
@@ -48,4 +62,5 @@ if __name__ == "__main__":
         parser.print_help()
 '''
 
-capture_images()
+# capture_images()
+convert_to_greyscale()

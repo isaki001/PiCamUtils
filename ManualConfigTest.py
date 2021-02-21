@@ -1,6 +1,16 @@
 import PiCamUtil
 import numpy as np
 
+def DisplayCurrentConfig(imgGrayArray, configFile):
+    test = PiCamUtil.Collection(4, configFile)
+    #test.Sets[0].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[0].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[1].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[2].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[3].DisplayConfigurationBounds(imgGrayArray)
+   
+
+
 def ConfigHelper(testingImg):
     acceptable = 0
     tempCopy = testingImg
@@ -36,11 +46,17 @@ def ConfigHelper(testingImg):
 
         if(acceptable != 1 and acceptable != 0):
             acceptable = 0
-            
-empty = PiCamUtil.pngToGrayArray("Images/empty.png")
-half_full = PiCamUtil.pngToGrayArray("Images/half_full.png")
 
-ConfigHelper(empty)
+#from gpiozero import LED
+#led = LED(15)
+#led.off()
+
+empty = PiCamUtil.GetGrayscale2D("big_empty")
+DisplayCurrentConfig(empty, "realConfig.csv")            
+#empty = PiCamUtil.pngToGrayArray("Images/empty.png")
+#half_full = PiCamUtil.pngToGrayArray("Images/half_full.png")
+
+#ConfigHelper(empty)
 
 #numEmpty = test.CompareImgs(empty, half_full)
 #rint("Available spots ",numEmpty) 

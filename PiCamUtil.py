@@ -47,6 +47,14 @@ def GetGrayscale2D(label):
             orig_png_text = np.array(orig_image)
             return orig_image_gray
 
+def TurnOnCamera():
+    with picamera.PiCamera() as camera:
+        with picamera.array.PiRGBArray(camera) as output:
+            camera.resolution = (256, 256)
+            camera.start_preview()
+            time.sleep(60)
+    
+        
 #class for the configuration of parking spot boundaries in terms of pixel-counts
 class ParkingSpotSet:
     def __init__(self, numPspots):
@@ -119,10 +127,12 @@ class ParkingSpotSet:
     
 class Collection:
     
-    def __init__(self, numSets):
+    def __init__(self, numSets, filename):
         self.numSets = numSets
-        if(os.path.isfile("config.csv") == True):
-            self.ConfigFromFile("config.csv") 
+        print("Initializing Collection")
+        if(os.path.isfile(filename) == True):
+            print("Configuring From File")
+            self.ConfigFromFile(filename) 
     
     def SetMaxAllowedDiffForEmpty(self, threshold):
         self.threshold = threshold
@@ -130,7 +140,7 @@ class Collection:
     def ConfigFromFile(self, filename):
        with open(filename) as csvfile:
            reader = csv.reader(csvfile, delimiter=',')
-          
+           
            for row in reader:
                numSpots = int(row[0])
                origin_row = int(row[1])
@@ -155,9 +165,9 @@ class Collection:
                spot_current_img = current[row:row + length, col:col + width]
                spot_ref_img = empty[row:row + length, col:col + width]
                
-               if(verbose == True):
-                   DisplayImgArray(spot_ref_img)
-                   DisplayImgArray(spot_current_img)
+               #if(verbose == True):
+               #    DisplayImgArray(spot_ref_img)
+               #    DisplayImgArray(spot_current_img)
         
                spot_diffs = np.subtract(spot_current_img, spot_ref_img)
                spot_diffs = np.absolute(spot_diffs)

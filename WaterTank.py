@@ -103,7 +103,6 @@ def find_difference(a, b):
     # create a binary thresholded image
     _, a = cv2.threshold(a, 127, 255, cv2.THRESH_BINARY)
 
-
     b = cv2.cvtColor(b, cv2.COLOR_BGR2RGB)
     # convert to grayscale
     b = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)

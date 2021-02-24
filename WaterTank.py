@@ -22,6 +22,7 @@ debug = True
 
 def capture_images(**kw):
     camera = picamera.PiCamera()
+    camera.resolution = (256, 256)
     if not os.path.exists(os.path.join(os.getcwd(), "Images")):
         os.mkdir(os.path.join(os.getcwd(), "Images"))
     if not kw["out"]:

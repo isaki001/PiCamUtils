@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
 # For working with Python Camera: https://medium.com/@petehouston/capture-images-from-raspberry-pi-camera-module-using-picamera-505e9788d609
 # TODO:Test the below codes
@@ -6,13 +6,13 @@
 # https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
 # https://www.thepythoncode.com/article/contour-detection-opencv-python: Contour Detection
 
-import picamera
+# import picamera
 import os
 import argparse
 import sys
 import re
 import time
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageChops
 import cv2
 import numpy as np
 from skimage import measure
@@ -48,6 +48,12 @@ def convert_to_greyscale(**kw):
     im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + ".jpg"))
 
 def compare_two_images(**kw):
+    #a = Image.open(os.path.join(os.getcwd(), "Images", kw["f1"]))
+    #b = Image.open(os.path.join(os.getcwd(), "Images", kw["f2"]))
+    a = cv2.imread(os.path.join(os.getcwd(), "Images", kw["f1"]))
+    b = cv2.imread(os.path.join(os.getcwd(), "Images", kw["f2"]))
+    find_difference(a,b)
+    '''
     try:
         original =  cv2.imread(os.path.join(os.getcwd(), "Images", kw["f1"]))
         duplicate =  cv2.imread(os.path.join(os.getcwd(), "Images", kw["f2"]))
@@ -66,6 +72,7 @@ def compare_two_images(**kw):
             if debug: sys.stdout.write("red difference: {}\n".format(cv2.countNonZero(r)))
     except Exception as e:
         sys.stderr.write("compare_two_images: " + str(e))
+    '''
 
 def find_image_contours(**kw):
     print(os.path.join(os.getcwd(), "Images", kw["f"]))
@@ -87,6 +94,58 @@ def find_image_contours(**kw):
     # show the image with the drawn contours
     plt.imshow(image)
     plt.show()
+    '''
+
+def find_difference(a, b):
+    a = cv2.cvtColor(a, cv2.COLOR_BGR2RGB)
+    # convert to grayscale
+    a = cv2.cvtColor(a, cv2.COLOR_RGB2GRAY)
+    # create a binary thresholded image
+    _, a = cv2.threshold(a, 127, 255, cv2.THRESH_BINARY)
+
+    b = cv2.cvtColor(b, cv2.COLOR_BGR2RGB)
+    # convert to grayscale
+    b = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+    # create a binary thresholded image
+    _, b = cv2.threshold(b, 127, 255, cv2.THRESH_BINARY)
+
+    cv2.imwrite(os.path.join(os.getcwd(), "Images", "FirstImage.png"), a)
+    cv2.imwrite(os.path.join(os.getcwd(), "Images", "SecondImage.png"), b)
+    sub = cv2.subtract(a, b)
+    with open('Image1.txt', 'w') as outfile:
+        outfile.write('# Array shape: {0}\n'.format(a.shape))
+        for slice_2d in a:
+            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
+            outfile.write('# New slice\n')
+
+    with open('Image2.txt', 'w') as outfile:
+        outfile.write('# Array shape: {0}\n'.format(b.shape))
+        for slice_2d in b:
+            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
+            outfile.write('# New slice\n')
+
+    with open('Diiference.txt', 'w') as outfile:
+        outfile.write('# Array shape: {0}\n'.format(sub.shape))
+        for slice_2d in sub:
+            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
+            outfile.write('# New slice\n')
+    cv2.imwrite(os.path.join(os.getcwd(), "Images", "DiffImage.png"), sub)
+    # np.savetxt('Matrix.txt', sub, delimiter=',')   # X is an array
+    # cv2.imshow("Substracted Image", sub)
+    #numpy_a = np.asarray(a)
+    #numpy_b = np.asarray(b)
+    #result = np.subtract(numpy_a - numpy_b)
+    #print(result)
+    '''
+    a = ImageOps.grayscale(a)
+    b = ImageOps.grayscale(b)
+    point_table = ([0] + ([255] * 255))
+    diff = ImageChops.difference(a, b)
+    diff = diff.convert('L')
+    diff = diff.point(point_table)
+    new = diff.convert('RGB')
+    new.paste(b, mask=diff)
+    new.save(os.path.join(os.getcwd(), "Images", "Diff.png"))
     '''
 
 if __name__ == "__main__":

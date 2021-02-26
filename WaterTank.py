@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
 # For working with Python Camera: https://medium.com/@petehouston/capture-images-from-raspberry-pi-camera-module-using-picamera-505e9788d609
 # TODO:Test the below codes
@@ -6,7 +6,7 @@
 # https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
 # https://www.thepythoncode.com/article/contour-detection-opencv-python: Contour Detection
 
-import picamera
+# import picamera
 import os
 import argparse
 import sys
@@ -39,6 +39,9 @@ def capture_images(**kw):
         test_image = kw["out"]
     camera.start_preview()
     time.sleep(2)
+    text = None
+    while text != "":
+        text = input("Hit Enter to capture image")
     if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "Images", test_image)))
     camera.capture(os.path.join(os.getcwd(), "Images",test_image))
     camera.stop_preview()

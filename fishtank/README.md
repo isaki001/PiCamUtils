@@ -28,4 +28,15 @@ Image Name| Water Level | LED Lights
  testImage5.jpg           |  low          |  green
  testImage6.jpg           |  mid          |  yellow
  testImage7.jpg           |  mid          |  yellow 
- 
+ testImage8.jpg           |  mid          |  yellow
+ testImage9.jpg           |  mid-high     |  yellow
+ testImage10.jpg          |  mid-high     |  yellow
+ testImage11.jpg          |  mid-high     |  yellow
+ testImage12.jpg          |  mid-high     |  yellow
+ testImage13.jpg          |  high         |  red
+ testImage14.jpg          |  high         |  red
+ testImage17.jpg          |  > high       |  red
+ testImage18.jpg          |  > high       |  red
+ testImage19.jpg          |  > high       |  red
+ testImage20.jpg          |  > high       |  red
+ testImage21.jpg          |  > high       |  red

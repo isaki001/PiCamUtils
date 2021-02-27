@@ -21,11 +21,11 @@ images
 
 Image Name| Water Level | LED Lights
 ---------|------------|--------------- 
- testImage1.jpg           |  low-mid      |  red
- testImage2.jpg           |  low          |  red
- testImage3.jpg           |  empty        |  red
- testImage4.jpg           |  empty        |  red
- testImage5.jpg           |  low          |  red
+ testImage1.jpg           |  low-mid      |  green
+ testImage2.jpg           |  low          |  green
+ testImage3.jpg           |  empty        |  green
+ testImage4.jpg           |  empty        |  green
+ testImage5.jpg           |  low          |  green
  testImage6.jpg           |  mid          |  yellow
  testImage7.jpg           |  mid          |  yellow 
  

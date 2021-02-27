@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
 # For working with Python Camera: https://medium.com/@petehouston/capture-images-from-raspberry-pi-camera-module-using-picamera-505e9788d609
 # TODO:Test the below codes
@@ -6,7 +6,7 @@
 # https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
 # https://www.thepythoncode.com/article/contour-detection-opencv-python: Contour Detection
 
-import picamera
+# import picamera
 import os
 import argparse
 import sys
@@ -34,7 +34,7 @@ def capture_images(**kw):
     text = None
     while text != "":
         text = input("Hit Enter to capture image")
-    sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "training", kw["out"])))
+    if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "training", kw["out"])))
     camera.capture(os.path.join(os.getcwd(), "images", "training", kw["out"]))
     camera.stop_preview()
 
@@ -50,6 +50,9 @@ def train_images(**kw):
     trainingData = measure_water_level("mid.jpg", configObj)
     kw["midWater"] = trainingData["waterHeight"]
     kw["midLand"] = trainingData["heightDifference"]
+    trainingData = measure_water_level("high.jpg", configObj)
+    kw["highWater"] = trainingData["waterHeight"]
+    kw["highLand"] = trainingData["heightDifference"]
     setup_config_file(**kw)
     configObj = read_config_file()
     if configObj["debug"]: sys.stdout.write("Trained Config: {}\n".format(configObj))
@@ -140,6 +143,8 @@ def find_heights(crop_img, image_height, debug):
         # Testing to see if water level has been reached
         if 0.3 < (pixel_match / 255) < 0.6 and water_height < i:
             water_height = i
+    if abs(fishtank_base - water_height) < 5:
+        fishtank_base = 255 - image_height
     if debug: sys.stdout.write("Fishtank Base Height Pixel Value: {}\n".format(fishtank_base))
     if debug: sys.stdout.write("Water Level Pixel Value: {}\n".format(water_height))
     if debug: sys.stdout.write("Top of the Land Pixel Value: {}\n".format(land_height))

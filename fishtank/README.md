@@ -1,6 +1,27 @@
 # Measure Water Level using Raspberry PI
 This project is about measuring water level using Raspberry PI.
 
+## Program Options
+
+```
+$ ./watertank.py --help
+usage: pi [-h] {capture,test,train} ...
+
+Raspberry Pi Water Tank Demo
+
+positional arguments:
+  {capture,test,train}
+    capture             Capture Images
+    test                Test images
+    train               Train Images
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+```
+1. Train the model: ./watertank.py train (add --debug flag for debug options)
+3. Test the model: ./watertank.py test <image name> (add --debug flag for debug options) : ./watertank.py test testImage1.jpg
+
 ## Project Code Description 
 
 ```

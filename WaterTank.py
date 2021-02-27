@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
 # For working with Python Camera: https://medium.com/@petehouston/capture-images-from-raspberry-pi-camera-module-using-picamera-505e9788d609
 # TODO:Test the below codes
@@ -6,7 +6,7 @@
 # https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
 # https://www.thepythoncode.com/article/contour-detection-opencv-python: Contour Detection
 
-import picamera
+# import picamera
 import os
 import argparse
 import sys
@@ -51,106 +51,70 @@ def convert_to_greyscale(**kw):
     im2 = ImageOps.grayscale(im1)
     im2.save(os.path.join(os.getcwd(), "Images", "greyscale" + ".jpg"))
 
-def compare_two_images(**kw):
-    #a = Image.open(os.path.join(os.getcwd(), "Images", kw["f1"]))
-    #b = Image.open(os.path.join(os.getcwd(), "Images", kw["f2"]))
-    a = cv2.imread(os.path.join(os.getcwd(), "Images", kw["f1"]))
-    b = cv2.imread(os.path.join(os.getcwd(), "Images", kw["f2"]))
-    find_difference(a,b)
-    '''
-    try:
-        original =  cv2.imread(os.path.join(os.getcwd(), "Images", kw["f1"]))
-        duplicate =  cv2.imread(os.path.join(os.getcwd(), "Images", kw["f2"]))
+def train_images(**kw):
+    print_image_details(os.path.join(os.getcwd(), "FishTankImages", "training", "Fishtank_Low.jpg"))
+    # print_image_details(os.path.join(os.getcwd(), "FishTankImages", "training", "Fishtank_Low1.jpg"))
+    # print_image_details(os.path.join(os.getcwd(), "FishTankImages", "training", "Fishtank_Mid.jpg"))
+    #print_image_details(os.path.join(os.getcwd(), "FishTankImages", "training", "Fishtank_Mid_1.jpg"))
 
-        if original.shape == duplicate.shape:
-            if debug: sys.stdout.write("Color images have same size and channels\n")
+def test_images(**kw):
+    print_image_details(os.path.join(os.getcwd(), "FishTankImages", "test", kw["f1"]))
 
-        difference = cv2.subtract(original, duplicate)
 
-        b, g, r = cv2.split(difference)
-        if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
-            if debug: sys.stdout.write("Color images are completely Equal")
+def print_image_details(a):
+    a = cv2.imread(a)
+    # convert to grayscale
+    a = cv2.cvtColor(a, cv2.COLOR_BGR2GRAY)
+    # create a binary thresholded image
+    a = cv2.GaussianBlur(a,(5,5),0)
+    _, a = cv2.threshold(a, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+
+    cv2.imwrite(os.path.join(os.getcwd(), "Images", "GreyImage.png"), a)
+
+    flag = False
+    for i in range(0, 255):
+        truth = 0
+        if flag:
+            break
         else:
-            if debug: sys.stdout.write("blue difference: {}\n".format(cv2.countNonZero(b)))
-            if debug: sys.stdout.write("green difference: {}\n".format(cv2.countNonZero(g)))
-            if debug: sys.stdout.write("red difference: {}\n".format(cv2.countNonZero(r)))
-    except Exception as e:
-        sys.stderr.write("compare_two_images: " + str(e))
-    '''
+            for j in range(0, 255):
+                if i > 50 and a[i][j] == 255:
+                    truth += 1
+            if (truth/255) > 0.1:
+                image_height = i
+                flag = True
 
-def find_image_contours(**kw):
-    print(os.path.join(os.getcwd(), "Images", kw["f"]))
-    image = cv2.imread(os.path.join(os.getcwd(), "Images", kw["f"]))
-    # convert to RGB
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # convert to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    # create a binary thresholded image
-    _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY_INV)
-    # show it
-    plt.imshow(binary, cmap="gray")
-    plt.show()
-    '''
-    # find the contours from the thresholded image
-    contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    # draw all contours
-    image = cv2.drawContours(image, contours, -1, (0, 255, 0), 2)
-    # show the image with the drawn contours
-    plt.imshow(image)
-    plt.show()
-    '''
+    print("Image Height:" + str(image_height))
+    crop_img = a[image_height:255, 0:255]
+    cv2.imwrite(os.path.join(os.getcwd(), "Images", "CroppedImage.png"), crop_img)
 
-def find_difference(a, b):
-    a = cv2.cvtColor(a, cv2.COLOR_BGR2RGB)
-    # convert to grayscale
-    a = cv2.cvtColor(a, cv2.COLOR_RGB2GRAY)
-    # create a binary thresholded image
-    _, a = cv2.threshold(a, 127, 255, cv2.THRESH_BINARY)
+    water_height = 0
+    land_height = -1
+    image_lower_limit = -1
+    for i in range(0, 255 - image_height):
+        pixel_match = 0
+        for j in range(0, 255):
+            if land_height == -1 and crop_img[i][j] == 255:
+                land_height = i
+            if crop_img[i][j] == 0:
+                pixel_match += 1
+                image_lower_limit = i
+                if j < 20:
+                    water_height = i
+        # Testing to see if water level has been reached
+        if 0.3 < (pixel_match / 255) < 0.6 and water_height < i:
+            water_height = i
 
-    b = cv2.cvtColor(b, cv2.COLOR_BGR2RGB)
-    # convert to grayscale
-    b = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
-    # create a binary thresholded image
-    _, b = cv2.threshold(b, 127, 255, cv2.THRESH_BINARY)
-
-    cv2.imwrite(os.path.join(os.getcwd(), "Images", "FirstImage.png"), a)
-    cv2.imwrite(os.path.join(os.getcwd(), "Images", "SecondImage.png"), b)
-    sub = cv2.subtract(a, b)
-    with open('Image1.txt', 'w') as outfile:
-        outfile.write('# Array shape: {0}\n'.format(a.shape))
-        for slice_2d in a:
-            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
-            outfile.write('# New slice\n')
-
-    with open('Image2.txt', 'w') as outfile:
-        outfile.write('# Array shape: {0}\n'.format(b.shape))
-        for slice_2d in b:
-            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
-            outfile.write('# New slice\n')
-
-    with open('Diiference.txt', 'w') as outfile:
-        outfile.write('# Array shape: {0}\n'.format(sub.shape))
-        for slice_2d in sub:
-            np.savetxt(outfile, slice_2d, fmt='%-7.2f')
-            outfile.write('# New slice\n')
-    cv2.imwrite(os.path.join(os.getcwd(), "Images", "DiffImage.png"), sub)
-    # np.savetxt('Matrix.txt', sub, delimiter=',')   # X is an array
-    # cv2.imshow("Substracted Image", sub)
-    #numpy_a = np.asarray(a)
-    #numpy_b = np.asarray(b)
-    #result = np.subtract(numpy_a - numpy_b)
-    #print(result)
-    '''
-    a = ImageOps.grayscale(a)
-    b = ImageOps.grayscale(b)
-    point_table = ([0] + ([255] * 255))
-    diff = ImageChops.difference(a, b)
-    diff = diff.convert('L')
-    diff = diff.point(point_table)
-    new = diff.convert('RGB')
-    new.paste(b, mask=diff)
-    new.save(os.path.join(os.getcwd(), "Images", "Diff.png"))
-    '''
+    print("Image Lower Limit: " + str(image_lower_limit))
+    print("Image Water Height: " + str(water_height))
+    print("Image Land Height: " + str(land_height))
+    diff = water_height - land_height
+    print("Land Water Height Difference: " + str(diff))
+    print("Scaling Ratio of Height Difference between land and water: " + str(diff/(image_lower_limit)))
+    print("Scaling Ratio of Water Height: " + str((image_lower_limit-water_height)/(image_lower_limit)))
+    cv2.imshow("GreyImage", a)
+    cv2.imshow("Crop", crop_img)
+    cv2.waitKey()
 
 if __name__ == "__main__":
 
@@ -161,18 +125,12 @@ if __name__ == "__main__":
     capture_parser.add_argument("out", help="Image Name")
     capture_parser.set_defaults(func=capture_images)
 
-    grey_parser = subparsers.add_parser("grey", help="Convert images to greyscale")
-    grey_parser.add_argument("--f", metavar="", default="snapshot.jpg", help="Image to covert to greyscale")
-    grey_parser.set_defaults(func=convert_to_greyscale)
-
-    contour_parser = subparsers.add_parser("cont", help="Find Image Contour")
-    contour_parser.add_argument("--f", metavar="", default="snapshot.jpg", help="Image to covert to greyscale")
-    contour_parser.set_defaults(func=find_image_contours)
-
-    compare_parser = subparsers.add_parser("compare", help="Convert two images")
+    compare_parser = subparsers.add_parser("test", help="Test images")
     compare_parser.add_argument("f1", help="First Image")
-    compare_parser.add_argument("f2", help="Second Image")
-    compare_parser.set_defaults(func=compare_two_images)
+    compare_parser.set_defaults(func=test_images)
+
+    train_parser = subparsers.add_parser("train", help="Train Images")
+    train_parser.set_defaults(func=train_images)
 
     args = parser.parse_args()
     try:

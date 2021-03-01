@@ -256,23 +256,23 @@ def measure_water_level(image_name, configObj):
     else:
 
         predicted_level = []
-        if (water_height/ tank_height) < configObj["waterHeightMid"]:
+        if round((water_height/ tank_height), 3) < configObj["waterHeightMid"]:
             predicted_level.append("green")
-        elif (water_height/ tank_height) < configObj["waterHeightHigh"]:
+        elif round((water_height/ tank_height), 3) < configObj["waterHeightHigh"]:
             predicted_level.append("yellow")
         else:
             predicted_level.append("red")
 
-        if ((land_height - water_height)/ tank_height) > configObj["heightDifferenceMid"]:
+        if round((land_height - water_height)/ tank_height, 3) > configObj["heightDifferenceMid"]:
             predicted_level.append("green")
-        elif ((land_height - water_height)/ tank_height) > configObj["heightDifferenceHigh"]:
+        elif round((land_height - water_height)/ tank_height, 3) > configObj["heightDifferenceHigh"]:
             predicted_level.append("yellow")
         else:
             predicted_level.append("red")
 
-        if water_height/land_height < configObj["waterLandRatioMid"]:
+        if round(water_height/land_height, 3) < configObj["waterLandRatioMid"]:
             predicted_level.append("green")
-        elif water_height/land_height < configObj["waterLandRatioHigh"]:
+        elif round(water_height/land_height, 3) < configObj["waterLandRatioHigh"]:
             predicted_level.append("yellow")
         else:
             predicted_level.append("red")

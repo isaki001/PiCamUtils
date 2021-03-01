@@ -12,6 +12,9 @@ def setup_config_file(**kwargs):
                         heightDifferenceLow=kwargs.get("lowLand", float(configObj['LOW']['DIFFERENCE'])),
                         heightDifferenceMid=kwargs.get("midLand", float(configObj['MID']['DIFFERENCE'])),
                         heightDifferenceHigh=kwargs.get("highLand", float(configObj['HIGH']['DIFFERENCE'])),
+                        waterLandRatioLow=kwargs.get("ratioLow", float(configObj['LOW']['RATIO'])),
+                        waterLandRatioMid=kwargs.get("ratioMid", float(configObj['MID']['RATIO'])),
+                        waterLandRatioHigh=kwargs.get("ratioHigh", float(configObj['HIGH']['RATIO'])),
                         debug=kwargs.get("debug", False),
                         training=kwargs.get("training", False))
     with open(os.path.join(conf_path, "config"), "wb") as ofile:

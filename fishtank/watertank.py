@@ -310,25 +310,25 @@ if __name__ == "__main__":
         if choice == 1:
             debug = ""
             while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ")
+                debug = input("Enter Debug Mode (Y/N):  ").lower()
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
             imageName = input("Enter Image Name:  ")
-            capture_images(imageName, debug.lower())
+            capture_images(imageName, debug)
         elif choice == 2:
             debug = ""
             while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ")
+                debug = input("Enter Debug Mode (Y/N):  ").lower()
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
-            train_images(debug.lower())
+            train_images(debug)
         elif choice == 3:
             debug = ""
             while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ")
+                debug = input("Enter Debug Mode (Y/N):  ").lower()
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
             imageName = input("Enter Image Name from the testing folder:  ")
-            test_images(imageName, debug.lower())
+            test_images(imageName, debug)
         elif choice != 0:
             print("Wrong Choice")

@@ -36,7 +36,7 @@ def capture_images(imageName, debug):
 
     """
     try:
-        setup_config_file({"debug": True if debug=="Y" else False, "training": False})
+        setup_config_file({"debug": True if debug=="y" else False, "training": False})
         configObj = read_config_file()
         camera = picamera.PiCamera()
         # Capture 256*256 resolution images
@@ -70,7 +70,7 @@ def train_images(debug):
         (bool): True on Success and False on Failure
     """
     try:
-        setup_config_file({"debug": True if debug=="Y" else False, "training": True})
+        setup_config_file({"debug": True if debug=="y" else False, "training": True})
         configObj = read_config_file()
         if configObj["debug"]: sys.stdout.write("Initial Config: {}\n".format(configObj))
         trainingValues = {}
@@ -112,11 +112,12 @@ def test_images(imageName, debug):
     """
     try:
         configObj = read_config_file()
-        configObj["debug"] = True if debug == "Y" else False
+        configObj["debug"] = True if debug == "y" else False
         configObj["training"] = False
         if configObj["debug"]: sys.stdout.write("Config: {}\n".format(configObj))
-
-        level = measure_water_level(imageName, configObj)
+        if configObj["waterHeightLow"] == -1:
+            print("Train your model and then test it")
+        level = measure_flooding_level(imageName, configObj)
         if level["led"] == "red":
             redPin = LED(configObj["redled"])
             redPin.on()
@@ -236,9 +237,9 @@ def get_heights(img, debug):
     if debug: sys.stdout.write("Water Height: " + str(tank_bottom - water_level) + "\n")
     return {"land": land_level, "water": water_level, "base": tank_bottom, "top": fishtank_top}
 
-def measure_water_level(image_name, configObj):
+def measure_flooding_level(image_name, configObj):
     """
-    Function to detect water level
+    Function to detect flooding water level
 
     Parameters:
         image_name (str): Image Name
@@ -313,14 +314,14 @@ if __name__ == "__main__":
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
             imageName = input("Enter Image Name:  ")
-            capture_images(imageName, debug)
+            capture_images(imageName, debug.lower())
         elif choice == 2:
             debug = ""
             while (debug not in ["y", "n"]):
                 debug = input("Enter Debug Mode (Y/N):  ")
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
-            train_images(debug)
+            train_images(debug.lower())
         elif choice == 3:
             debug = ""
             while (debug not in ["y", "n"]):
@@ -328,6 +329,6 @@ if __name__ == "__main__":
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
             imageName = input("Enter Image Name from the testing folder:  ")
-            test_images(imageName, debug)
+            test_images(imageName, debug.lower())
         elif choice != 0:
             print("Wrong Choice")

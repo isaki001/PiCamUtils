@@ -2,21 +2,21 @@ import configparser
 import pickle
 import os
 
-def setup_config_file(**kwargs):
+def setup_config_file(configDict):
     configObj = configparser.ConfigParser()
     conf_path = os.path.join(os.path.dirname(__file__), "configuration")
     configObj.read(os.path.join(conf_path, "config.ini"))
-    conf_record = dict(waterHeightLow=kwargs.get("lowWater", float(configObj['LOW']['WATER'])),
-                        waterHeightMid=kwargs.get("midWater" , float(configObj['MID']['WATER'])),
-                        waterHeightHigh=kwargs.get("highWater" , float(configObj['HIGH']['WATER'])),
-                        heightDifferenceLow=kwargs.get("lowLand", float(configObj['LOW']['DIFFERENCE'])),
-                        heightDifferenceMid=kwargs.get("midLand", float(configObj['MID']['DIFFERENCE'])),
-                        heightDifferenceHigh=kwargs.get("highLand", float(configObj['HIGH']['DIFFERENCE'])),
-                        waterLandRatioLow=kwargs.get("ratioLow", float(configObj['LOW']['RATIO'])),
-                        waterLandRatioMid=kwargs.get("ratioMid", float(configObj['MID']['RATIO'])),
-                        waterLandRatioHigh=kwargs.get("ratioHigh", float(configObj['HIGH']['RATIO'])),
-                        debug=kwargs.get("debug", False),
-                        training=kwargs.get("training", False))
+    conf_record = dict(waterHeightLow=configDict.get("lowWater", float(configObj['LOW']['WATER'])),
+                        waterHeightMid=configDict.get("midWater" , float(configObj['MID']['WATER'])),
+                        waterHeightHigh=configDict.get("highWater" , float(configObj['HIGH']['WATER'])),
+                        heightDifferenceLow=configDict.get("lowLand", float(configObj['LOW']['DIFFERENCE'])),
+                        heightDifferenceMid=configDict.get("midLand", float(configObj['MID']['DIFFERENCE'])),
+                        heightDifferenceHigh=configDict.get("highLand", float(configObj['HIGH']['DIFFERENCE'])),
+                        waterLandRatioLow=configDict.get("ratioLow", float(configObj['LOW']['RATIO'])),
+                        waterLandRatioMid=configDict.get("ratioMid", float(configObj['MID']['RATIO'])),
+                        waterLandRatioHigh=configDict.get("ratioHigh", float(configObj['HIGH']['RATIO'])),
+                        debug=configDict.get("debug", False),
+                        training=configDict.get("training", False))
     with open(os.path.join(conf_path, "config"), "wb") as ofile:
         pickle.dump(conf_record, ofile)
 

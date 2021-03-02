@@ -17,65 +17,126 @@ import cv2
 import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
+from gpiozero import LED
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file
 
 
-def capture_images(**kw):
-    camera = picamera.PiCamera()
-    camera.resolution = (256, 256)
-    if not os.path.exists(os.path.join(os.getcwd(), "images")):
-        os.mkdir(os.path.join(os.getcwd(), "images"))
-    if not os.path.exists(os.path.join(os.getcwd(), "images", "testing")):
-        os.mkdir(os.path.join(os.getcwd(), "images", "testing"))
-    camera.start_preview()
-    time.sleep(2)
-    text = None
-    while text != "":
-        text = input("Hit Enter to capture image")
-    if debug: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", kw["out"])))
-    camera.capture(os.path.join(os.getcwd(), "images", "training", kw["out"]))
-    camera.stop_preview()
+def capture_images(imageName, debug):
+    """
+    Function to capture images from PI camera
 
-def train_images(**kw):
-    kw["training"] = True
-    setup_config_file(**kw)
-    configObj = read_config_file()
-    if configObj["debug"]: sys.stdout.write("Initial Config: {}\n".format(configObj))
-    trainingData = measure_water_level("low.jpg", configObj)
-    # measure_water_level("low1.jpg", configObj)
-    kw["lowWater"] = trainingData["waterHeight"]
-    kw["lowLand"] = trainingData["heightDifference"]
-    kw["ratioLow"] = trainingData["wlratio"]
-    trainingData = measure_water_level("mid.jpg", configObj)
-    kw["midWater"] = trainingData["waterHeight"]
-    kw["midLand"] = trainingData["heightDifference"]
-    kw["ratioMid"] = trainingData["wlratio"]
-    trainingData = measure_water_level("high.jpg", configObj)
-    kw["highWater"] = trainingData["waterHeight"]
-    kw["highLand"] = trainingData["heightDifference"]
-    kw["ratioHigh"] = trainingData["wlratio"]
-    setup_config_file(**kw)
-    configObj = read_config_file()
-    if configObj["debug"]: sys.stdout.write("Trained Config: {}\n".format(configObj))
-    # measure_water_level("mid1.jpg", configObj)
+    Parameters:
+        imageName (str): Name of captured Image
+        debug (bool): Debug Mode
 
-def test_images(**kw):
-    configObj = read_config_file()
-    configObj["debug"] = kw["debug"]
-    configObj["training"] = False
-    if configObj["debug"]: sys.stdout.write("Config: {}\n".format(configObj))
-    level = measure_water_level(kw["f1"], configObj)
-    print(level)
+    Returns:
+        (bool): True on Success and False on Failure
 
-def test_images_function(arguments):
-    configObj = read_config_file()
-    configObj["training"] = False
-    configObj["debug"] = arguments["debug"]
-    if configObj["debug"]: sys.stdout.write("Config: {}\n".format(configObj))
-    level = measure_water_level(arguments["f1"], configObj)
-    return level
+    """
+    try:
+        setup_config_file({"debug": True if debug=="Y" else False, "training": False})
+        configObj = read_config_file()
+        camera = picamera.PiCamera()
+        # Capture 256*256 resolution images
+        camera.resolution = (256, 256)
+        # Check if testing folder is present or not
+        if not os.path.exists(os.path.join(os.getcwd(), "images")):
+            os.mkdir(os.path.join(os.getcwd(), "images"))
+        if not os.path.exists(os.path.join(os.getcwd(), "images", "testing")):
+            os.mkdir(os.path.join(os.getcwd(), "images", "testing"))
+        camera.start_preview()
+        time.sleep(2)
+        text = None
+        while text != "":
+            text = input("Hit Enter to capture image")
+        if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", kw["out"])))
+        camera.capture(os.path.join(os.getcwd(), "images", "training", kw["out"]))
+        camera.stop_preview()
+        return True
+    except Exception as e:
+        sys.stderr.write("Error from capture_images: {}\n".format(e))
+    return False
+
+def train_images(debug):
+    """
+    Function to train the water level model
+
+    Parameters:
+        debug (bool): Debug Mode
+
+    Returns:
+        (bool): True on Success and False on Failure
+    """
+    try:
+        setup_config_file({"debug": True if debug=="Y" else False, "training": True})
+        configObj = read_config_file()
+        if configObj["debug"]: sys.stdout.write("Initial Config: {}\n".format(configObj))
+        trainingValues = {}
+        # Training on low level image
+        trainingData = measure_water_level("low.jpg", configObj)
+        # Adding the values to configObj to update it back to config
+        trainingValues["lowWater"] = trainingData["waterHeight"]
+        trainingValues["lowLand"] = trainingData["heightDifference"]
+        trainingValues["ratioLow"] = trainingData["wlratio"]
+        trainingData = measure_water_level("mid.jpg", configObj)
+        trainingValues["midWater"] = trainingData["waterHeight"]
+        trainingValues["midLand"] = trainingData["heightDifference"]
+        trainingValues["ratioMid"] = trainingData["wlratio"]
+        trainingData = measure_water_level("high.jpg", configObj)
+        trainingValues["highWater"] = trainingData["waterHeight"]
+        trainingValues["highLand"] = trainingData["heightDifference"]
+        trainingValues["ratioHigh"] = trainingData["wlratio"]
+        trainingValues["debug"] = True if debug=="Y" else False
+        trainingValues["training"] = True
+        setup_config_file(trainingValues)
+        configObj = read_config_file()
+        if configObj["debug"]: sys.stdout.write("Trained Config: {}\n".format(configObj))
+        return True
+    except Exception as e:
+        sys.stderr.write("Error from train_images: {}\n".format(e))
+    return False
+
+def test_images(imageName, debug):
+    """
+    Function to test images
+
+    Parameters:
+        imageName (str): Name of testing image
+        debug (bool): Debug Mode
+
+    Returns:
+        (bool): True on Success and False on Failure
+
+    """
+    try:
+        configObj = read_config_file()
+        configObj["debug"] = True if debug == "Y" else False
+        configObj["training"] = False
+        if configObj["debug"]: sys.stdout.write("Config: {}\n".format(configObj))
+
+        level = measure_water_level(imageName, configObj)
+        if level["led"] == "red":
+            redPin = LED(4)
+            redPin.on()
+            time.sleep(5)
+            redPin.off()
+        elif level["led"] == "yellow":
+            yellowPin = LED(17)
+            yellowPin.on()
+            time.sleep(5)
+            yellowPin.off()
+        elif level["led"] == "green":
+            greenPin = LED(22)
+            greenPin.on()
+            time.sleep(5)
+            greenPin.off()
+        return True
+    except Exception as e:
+        sys.stderr.write("Error from test_images: {}\n".format(e))
+    return False
+
 
 def convert_to_greyscale(image_path, debug):
     """
@@ -100,9 +161,19 @@ def convert_to_greyscale(image_path, debug):
     if debug: sys.stdout.write("convert_to_greyscale done\n")
     return img
 
-def get_image_crop_height(img, debug):
+def get_heights(img, debug):
     """
     Function to get the height pixel value to crop the image
+
+    Top of the tank:    white pixel with least pixel value on the image
+    Tank Width:         maximum white pixel value to the right of image
+    Bottom of the tank: white pixel with greatest pixel value on the image
+    Top of the land:    row with white pixel value less than 0.8, tested after
+                    discarding all the rows with white pixel values greater than
+                    0.95 that represent the white background of the image
+    Water level:        checking from the bottom of the image to the top of the
+                    land in the second half of the image for row with white
+                    pixel values between 0.3 and 0.43
 
     Parameters:
         img (image): OpenCV image type
@@ -142,13 +213,7 @@ def get_image_crop_height(img, debug):
                 reset = True
                 continue
             # Checking to make sure the water pixels are more than 10% of the entire width
-            #if reset:
-                #print(i)
-                #print("Pixel Match: " + str(pixel_match))
-                #print("Ratio: " + str(pixel_match/tank_width))
             if (pixel_match / tank_width) < 0.8 and reset:
-                #print("Pixel Match: " + str(pixel_match))
-                #print("Ratio: " + str(pixel_match/tank_width))
                 land_level = i
                 flag = True
     flag = True
@@ -160,7 +225,6 @@ def get_image_crop_height(img, debug):
                     testing.append(1)
                 else:
                     testing.append(0)
-            # print("Count : " + str(testing.count(1)) + " Ratio: " + str(testing.count(1)/tank_width) + " Index: " + str(i))
             if 0.3 < (testing.count(1)/tank_width) < 0.43:
                 water_level = i
                 flag = False
@@ -170,47 +234,7 @@ def get_image_crop_height(img, debug):
     if debug: sys.stdout.write("Land Height: " + str(land_height) + "\n")
     if debug: sys.stdout.write("Water Level: " + str(water_level) + "\n")
     if debug: sys.stdout.write("Water Height: " + str(tank_bottom - water_level) + "\n")
-    # if debug: sys.stdout.write("Image Height: {}\n".format(image_height))
     return {"land": land_level, "water": water_level, "base": tank_bottom, "top": fishtank_top}
-
-    #return image_height
-
-def find_heights(crop_img, image_height, debug):
-    """
-    Function to find the land, water, and fishtank base heights
-
-    Parameters:
-        crop_img (image): OpenCV Image type cropped image
-        image_height (int): Pixel value for height of image
-        debug (bool): Debug Mode
-
-    Returns:
-        (dict): {"land": xxx, "water": xxx, "base": xxx}
-    """
-    water_height = 0
-    land_height = -1
-    fishtank_base = -1
-    for i in range(0, 255 - image_height):
-        pixel_match = 0
-        for j in range(0, 255):
-            if land_height == -1 and crop_img[i][j] == 255:
-                land_height = i
-            if crop_img[i][j] == 0:
-                pixel_match += 1
-                fishtank_base = i
-                #if j < 20:
-                #    water_height = i
-        # Testing to see if water level has been reached
-
-        if 0.3 < (pixel_match / 255) < 0.6 and water_height < i:
-            # print("Matching pixels: " + str(pixel_match) + " water_height: " + str(water_height))
-            water_height = i
-    if abs(fishtank_base - water_height) < 3:
-        fishtank_base = 255 - image_height
-    if debug: sys.stdout.write("Fishtank Base Height Pixel Value: {}\n".format(fishtank_base))
-    if debug: sys.stdout.write("Water Level Pixel Value: {}\n".format(water_height))
-    if debug: sys.stdout.write("Top of the Land Pixel Value: {}\n".format(land_height))
-    return {"land": land_height, "water": water_height, "base": fishtank_base}
 
 def measure_water_level(image_name, configObj):
     """
@@ -224,32 +248,23 @@ def measure_water_level(image_name, configObj):
         img = convert_to_greyscale(os.path.join(os.getcwd(), "images", "training", image_name), configObj["debug"])
     else:
         img = convert_to_greyscale(os.path.join(os.getcwd(), "images", "testing", image_name), configObj["debug"])
-    #image_height = get_image_crop_height(img, configObj["debug"])
-    dict_pixel_height = get_image_crop_height(img, configObj["debug"])
-    # cropping the image
-    #crop_img = img[image_height:255, 0:255]
-    #cv2.imwrite(os.path.join(os.getcwd(), "images", "intermediate", "croppedImage.png"), crop_img)
-    #dict_pixel_height = find_heights(crop_img, image_height, configObj["debug"])
-    #"land": image_height, "water": water_level, "base": tank_bottom, "top": fishtank_top
+    dict_pixel_height = get_heights(img, configObj["debug"])
 
     tank_height = dict_pixel_height["base"] - dict_pixel_height["top"]
     scaling_factor = tank_height/255;
     land_height = scaling_factor * (dict_pixel_height["base"] - dict_pixel_height["land"])
     water_height = scaling_factor * (dict_pixel_height["base"] - dict_pixel_height["water"])
-    #diff = dict_pixel_height["water"] - dict_pixel_height["land"]
-    #waterHeight = (dict_pixel_height["base"] - dict_pixel_height["water"])/dict_pixel_height["base"]
-    #heightDifference = diff/dict_pixel_height["base"]
 
     if configObj["debug"]: sys.stdout.write("Land and Water Height Difference: {} \n".format(land_height - water_height))
     if configObj["debug"]: sys.stdout.write("Scaling Ratio of Height Difference between land and water: {}\n".format((land_height - water_height)/ tank_height))
     if configObj["debug"]: sys.stdout.write("Scaling Ratio of Water Height: {}\n".format(water_height/ tank_height))
     if configObj["debug"]: sys.stdout.write("Ratio Water/Land: {}\n".format(water_height/land_height))
 
+    '''
     if configObj["debug"] and not configObj["training"]:
         cv2.imshow("GreyImage", img)
-        # cv2.imshow("Crop", crop_img)
         cv2.waitKey()
-
+    '''
 
     if configObj["training"]:
         return {"waterHeight": round(water_height/ tank_height, 3), "heightDifference": round((land_height - water_height)/ tank_height, 3), "wlratio": round(water_height/land_height,3) }
@@ -288,6 +303,24 @@ def measure_water_level(image_name, configObj):
 
 if __name__ == "__main__":
 
+    choice = 1
+    while(choice):
+        choice = input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0:Exit")
+        if choice == 1:
+            debug = input("Enter Debug Mode (Y/N)")
+            imageName = input("Enter Image Name")
+            capture_images(imageName, debug)
+        elif choice == 2:
+            debug = input("Enter Debug Mode (Y/N)")
+            train_images(debug)
+        elif choice == 3:
+            debug = input("Enter Debug Mode (Y/N)")
+            imageName = input("Enter Image Name from the testing folder")
+            test_images(imageName, debug)
+        elif choice != 0:
+            print("Wrong Choice")
+
+    '''
     parser = argparse.ArgumentParser(description="Raspberry Pi Water Tank Demo", prog="pi")
     subparsers = parser.add_subparsers()
 
@@ -310,3 +343,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         parser.print_help()
+    '''

@@ -1,17 +1,11 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
-import picamera
+# import picamera
 import os
-import argparse
 import sys
-import re
 import time
-from PIL import Image, ImageOps, ImageChops
 import cv2
-import numpy as np
-from skimage import measure
-import matplotlib.pyplot as plt
-from gpiozero import LED
+# from gpiozero import LED
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file

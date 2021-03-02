@@ -1,46 +1,54 @@
-# Measure Water Level using Raspberry PI
-This project is about measuring water level using Raspberry PI.
+# Flooding Alarm System using Raspberry PI
+This project measures the flooding levels using Raspberry PI by comparing images and turns on the respective LED to alert the user.
+
+## DEPENDENCIES
+* Python3 
+* picamera
+* OpenCV
+* gpiozero
+
+## Project Assumptions
+1. The code requires 256*256 pixel images.
+2. This project was simulated on a fish tank.
+3. All the training and testing images must capture the entire fishtank.
+4. More than 90% of the image must be the fish tank to reduce the surrounding noise for better results. 
+
+## LED Color Codes
+
+LED Color| Water Level | 
+---------|------------| 
+RED      | High Water Level
+YELLOW   | Moderate Water Level
+GREEN    | Low Water Level
 
 ## Program Options
+```
+$ ./watertank.py 
+1: Capture Image 
+2: Training the Model 
+3: Testing the Model
+0: Exit
 
 ```
-$ ./watertank.py --help
-usage: pi [-h] {capture,test,train} ...
-
-Raspberry Pi Water Tank Demo
-
-positional arguments:
-  {capture,test,train}
-    capture             Capture Images
-    test                Test images
-    train               Train Images
-
-optional arguments:
-  -h, --help            show this help message and exit
-
-```
-1. Train the model: ./watertank.py train (add --debug flag for debug options)
-3. Test the model: ./watertank.py test <image name> (add --debug flag for debug options) : ./watertank.py test testImage1.jpg
 
 ## Project Code Description 
 
 ```
 .
 ├── images                 # Module for aggregating and reporting data from multiple data sources 
-├── watertank.py           # Code for measuring water tank level and turning the respective LED ligts 
+│  ├── testing             # Testing Images
+│  ├── training            # Training Images
+│  ├── intrermediate       # Intermediate Images
+├── watertank.py           # Code for measuring water tank level and turning the respective LED ligts
+├── configmanagement.py    # Read and writing configuration files
+├── configuration
+│  ├── config.ini          # Configuration file
+│  ├── config              # Serialized Config object
 ```
 
-## Image Description
+## Truth Set of Testing Images
 
-```
-images
-├── testing              # Testing Images
-├── training             # Training Images 
-```
-
-**Testing Images**
-
-Image Name| Water Level | LED Lights
+Image Name| Water Level | LED Light
 ---------|------------|--------------- 
  testImage1.jpg           |  low-mid      |  green
  testImage2.jpg           |  low          |  green
@@ -61,3 +69,5 @@ Image Name| Water Level | LED Lights
  testImage19.jpg          |  > high       |  red
  testImage20.jpg          |  > high       |  red
  testImage21.jpg          |  > high       |  red
+ testImage22.jpg          |  > high       |  red
+ testImage23.jpg          |  > high       |  red

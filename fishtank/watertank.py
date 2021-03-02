@@ -118,17 +118,17 @@ def test_images(imageName, debug):
 
         level = measure_water_level(imageName, configObj)
         if level["led"] == "red":
-            redPin = LED(4)
+            redPin = LED(configObj["redled"])
             redPin.on()
             time.sleep(5)
             redPin.off()
         elif level["led"] == "yellow":
-            yellowPin = LED(17)
+            yellowPin = LED(configObj["yellowled"])
             yellowPin.on()
             time.sleep(5)
             yellowPin.off()
         elif level["led"] == "green":
-            greenPin = LED(22)
+            greenPin = LED(configObj["greenled"])
             greenPin.on()
             time.sleep(5)
             greenPin.off()

@@ -16,7 +16,11 @@ def setup_config_file(configDict):
                         waterLandRatioMid=configDict.get("ratioMid", float(configObj['MID']['RATIO'])),
                         waterLandRatioHigh=configDict.get("ratioHigh", float(configObj['HIGH']['RATIO'])),
                         debug=configDict.get("debug", False),
-                        training=configDict.get("training", False))
+                        training=configDict.get("training", False),
+                        redled=configDict,get("red", int(configObj["LED"]["RED"])),
+                        yellowled=configDict,get("red", int(configObj["LED"]["YELLOW"])),
+                        greenled=configDict,get("red", int(configObj["LED"]["GREEN"])),
+                        )
     with open(os.path.join(conf_path, "config"), "wb") as ofile:
         pickle.dump(conf_record, ofile)
 

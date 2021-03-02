@@ -75,16 +75,16 @@ def train_images(debug):
         if configObj["debug"]: sys.stdout.write("Initial Config: {}\n".format(configObj))
         trainingValues = {}
         # Training on low level image
-        trainingData = measure_water_level("low.jpg", configObj)
+        trainingData = measure_flooding_level("low.jpg", configObj)
         # Adding the values to configObj to update it back to config
         trainingValues["lowWater"] = trainingData["waterHeight"]
         trainingValues["lowLand"] = trainingData["heightDifference"]
         trainingValues["ratioLow"] = trainingData["wlratio"]
-        trainingData = measure_water_level("mid.jpg", configObj)
+        trainingData = measure_flooding_level("mid.jpg", configObj)
         trainingValues["midWater"] = trainingData["waterHeight"]
         trainingValues["midLand"] = trainingData["heightDifference"]
         trainingValues["ratioMid"] = trainingData["wlratio"]
-        trainingData = measure_water_level("high.jpg", configObj)
+        trainingData = measure_flooding_level("high.jpg", configObj)
         trainingValues["highWater"] = trainingData["waterHeight"]
         trainingValues["highLand"] = trainingData["heightDifference"]
         trainingValues["ratioHigh"] = trainingData["wlratio"]

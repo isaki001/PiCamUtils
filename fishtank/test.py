@@ -1,12 +1,15 @@
-#!/usr/bin/env	python3.7
-import sys, time
-import RPi.GPIO as GPIO
+#!/usr/bin/env	python3
+from gpiozero import LED
 
 from watertank import test_images_function
 
-redPin   = 11
+redPin   = LED(4)
 greenPin = 13
 bluePin  = 15
+
+redPin.on()
+print("LED Done")
+exit(1)
 
 '''
 led = ["green", "yellow", "red"]
@@ -101,7 +104,7 @@ def main():
 		elif cmd == "green on":
 			greenOn()
 
-		elif cmd == "green off"
+		elif cmd == "green off":
 			greenOff()
 
 		elif cmd == "blue on":

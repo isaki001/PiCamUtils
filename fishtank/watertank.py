@@ -305,42 +305,17 @@ if __name__ == "__main__":
 
     choice = 1
     while(choice):
-        choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0:Exit"))
+        choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0:Exit\n"))
         if choice == 1:
-            debug = input("Enter Debug Mode (Y/N)")
-            imageName = input("Enter Image Name")
+            debug = input("Enter Debug Mode (Y/N):  ")
+            imageName = input("Enter Image Name:  ")
             capture_images(imageName, debug)
         elif choice == 2:
-            debug = input("Enter Debug Mode (Y/N)")
+            debug = input("Enter Debug Mode (Y/N):  ")
             train_images(debug)
         elif choice == 3:
-            debug = input("Enter Debug Mode (Y/N)")
-            imageName = input("Enter Image Name from the testing folder")
+            debug = input("Enter Debug Mode (Y/N):  ")
+            imageName = input("Enter Image Name from the testing folder:  ")
             test_images(imageName, debug)
         elif choice != 0:
             print("Wrong Choice")
-
-    '''
-    parser = argparse.ArgumentParser(description="Raspberry Pi Water Tank Demo", prog="pi")
-    subparsers = parser.add_subparsers()
-
-    capture_parser = subparsers.add_parser("capture", help="Capture Images")
-    capture_parser.add_argument("out", help="Image Name")
-    capture_parser.set_defaults(func=capture_images)
-
-    test_parser = subparsers.add_parser("test", help="Test images")
-    test_parser.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
-    test_parser.add_argument("f1", help="Image Name")
-    test_parser.set_defaults(func=test_images)
-
-    train_parser = subparsers.add_parser("train", help="Train Images")
-    train_parser.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
-    train_parser.set_defaults(func=train_images)
-
-    args = parser.parse_args()
-    try:
-        args.func(**vars(args))
-    except Exception as e:
-        print(e)
-        parser.print_help()
-    '''

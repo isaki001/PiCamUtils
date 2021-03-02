@@ -1,15 +1,23 @@
 #!/usr/bin/env	python3
 from gpiozero import LED
-
+import time
 from watertank import test_images_function
 
 redPin   = LED(4)
-greenPin = 13
-bluePin  = 15
+yellowPin = LED(17)
+greenPin  = LED(22)
+
+option = 1
+
 
 redPin.on()
+yellowPin.on()
+greenPin.on()
 print("LED Done")
-exit(1)
+time.sleep(3)
+redPin.off()
+yellowPin.on()
+greenPin.on()
 
 '''
 led = ["green", "yellow", "red"]

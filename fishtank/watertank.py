@@ -45,8 +45,8 @@ def capture_images(imageName, debug):
         text = None
         while text != "":
             text = input("Hit Enter to capture image")
-        if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", kw["out"])))
-        camera.capture(os.path.join(os.getcwd(), "images", "training", kw["out"]))
+        if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
+        camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
         camera.stop_preview()
         return True
     except Exception as e:

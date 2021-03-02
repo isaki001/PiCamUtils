@@ -307,7 +307,7 @@ if __name__ == "__main__":
     while(choice):
         choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0: Exit\n"))
         if choice == 1:
-            debug = "y"
+            debug = ""
             while (debug not in ["y", "n"]):
                 debug = input("Enter Debug Mode (Y/N):  ")
                 if debug.lower() not in ["y", "n"]:
@@ -315,14 +315,14 @@ if __name__ == "__main__":
             imageName = input("Enter Image Name:  ")
             capture_images(imageName, debug)
         elif choice == 2:
-            debug = "y"
+            debug = ""
             while (debug not in ["y", "n"]):
                 debug = input("Enter Debug Mode (Y/N):  ")
                 if debug.lower() not in ["y", "n"]:
                     print("Enter valid debug choice")
             train_images(debug)
         elif choice == 3:
-            debug = "y"
+            debug = ""
             while (debug not in ["y", "n"]):
                 debug = input("Enter Debug Mode (Y/N):  ")
                 if debug.lower() not in ["y", "n"]:

@@ -18,8 +18,11 @@ def setup_config_file(configDict):
                         debug=configDict.get("debug", False),
                         training=configDict.get("training", False),
                         redled=configDict.get("red", int(configObj["LED"]["RED"])),
-                        yellowled=configDict.get("red", int(configObj["LED"]["YELLOW"])),
-                        greenled=configDict.get("red", int(configObj["LED"]["GREEN"])),
+                        yellowled=configDict.get("yellow", int(configObj["LED"]["YELLOW"])),
+                        greenled=configDict.get("green", int(configObj["LED"]["GREEN"])),
+                        traininglow=configDict.get("low", int(configObj["TRAINING"]["LOW"])),
+                        trainingmid=configDict.get("mid", int(configObj["TRAINING"]["MID"])),
+                        traininghigh=configDict.get("high", int(configObj["TRAINING"]["HIGH"])),
                         )
     with open(os.path.join(conf_path, "config"), "wb") as ofile:
         pickle.dump(conf_record, ofile)

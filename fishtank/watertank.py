@@ -58,6 +58,10 @@ def train_images(debug):
         (bool): True on Success and False on Failure
     """
     try:
+        if not os.path.exists(os.path.join(os.getcwd(), "images", "training")):
+            raise Exception("Training images folder absent")
+        elif not os.listdir(os.path.join(os.getcwd(), "images", "training")):
+            raise Exception("Training images absent")
         setup_config_file({"debug": True if debug=="y" else False, "training": True})
         configObj = read_config_file()
         if configObj["debug"]: sys.stdout.write("Initial Config: {}\n".format(configObj))
@@ -99,6 +103,8 @@ def test_images(imageName, debug):
 
     """
     try:
+        if not os.path.exists(os.path.join(os.getcwd(), "images", "training", imageName)):
+            raise Exception("Testing image not present")
         configObj = read_config_file()
         configObj["debug"] = True if debug == "y" else False
         configObj["training"] = False

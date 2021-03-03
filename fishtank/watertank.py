@@ -40,7 +40,9 @@ def capture_images(imageName, debug):
             camera = picamera.PiCamera()
             # Capture 256*256 resolution images
             camera.resolution = (256, 256)
+            print(camera)
             camera.start_preview()
+            print(camera)
             time.sleep(2)
             text = None
             while text != "":
@@ -48,9 +50,12 @@ def capture_images(imageName, debug):
             if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
             camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
             camera.stop_preview()
+            camera.close()
             return True
     except Exception as e:
         sys.stderr.write("Error from capture_images: {}\n".format(e))
+        camera.stop_preview()
+        camera.close()
     return False
 
 def train_images(debug):

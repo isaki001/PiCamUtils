@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3.7
+#!/usr/bin/env	python3
 
 import os
 # Cheking if OS is Raspberry PI
@@ -40,14 +40,12 @@ def capture_images(imageName, debug):
             camera = picamera.PiCamera()
             # Capture 256*256 resolution images
             camera.resolution = (256, 256)
-            print(camera)
             camera.start_preview()
-            print(camera)
             time.sleep(2)
             text = None
             while text != "":
                 text = input("Hit Enter to capture image\n")
-            if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
+            if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName + ".jpg")))
             camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName), format="jpeg")
             camera.stop_preview()
             camera.close()

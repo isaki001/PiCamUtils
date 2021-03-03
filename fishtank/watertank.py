@@ -48,7 +48,7 @@ def capture_images(imageName, debug):
             while text != "":
                 text = input("Hit Enter to capture image\n")
             if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
-            camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
+            camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName), format="jpeg")
             camera.stop_preview()
             camera.close()
             return True

@@ -45,8 +45,12 @@ def capture_images(imageName, debug):
             text = None
             while text != "":
                 text = input("Hit Enter to capture image\n")
-            if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName + ".jpg")))
-            camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName), format="jpeg")
+            try:
+                camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
+                if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
+            except PiCameraValueError as e:
+                camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName), format="jpeg")
+                if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName + ".jpg")))
             camera.stop_preview()
             camera.close()
             return True
@@ -112,7 +116,8 @@ def test_images(imageName, debug):
 
     """
     try:
-        imageName += ".jpg"
+        if not imageName.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+            imageName += ".jpg"
         if not os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             raise Exception("Testing image not present")
         if not os.path.exists(os.path.join(os.getcwd(), "configuration", "config")):

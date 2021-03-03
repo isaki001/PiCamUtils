@@ -30,11 +30,11 @@ def capture_images(imageName, debug):
             os.mkdir(os.path.join(os.getcwd(), "images"))
         if not os.path.exists(os.path.join(os.getcwd(), "images", "testing")):
             os.mkdir(os.path.join(os.getcwd(), "images", "testing"))
-        replace = "y"
+        replace = ""
         if os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             while replace not in ["y", "n"]:
                 replace = input("Image is present. Do you want to overwrite it? (Y/N)\n").lower()
-        if replace == "y":
+        if replace == "y" or not os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             setup_config_file({"debug": True if debug=="y" else False, "training": False})
             configObj = read_config_file()
             camera = picamera.PiCamera()

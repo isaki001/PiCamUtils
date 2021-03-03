@@ -1,16 +1,17 @@
 #!/usr/bin/env	python3.7
 
-# import picamera
 import os
+# Cheking if OS is Raspberry PI
+if os.uname()[4][:3] == "arm":
+    import picamera
+    from gpiozero import LED
 import sys
 import time
 import cv2
-# from gpiozero import LED
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file
 
-print(os.uname())
 def capture_images(imageName, debug):
     """
     Function to capture images from PI camera
@@ -24,25 +25,30 @@ def capture_images(imageName, debug):
 
     """
     try:
-        setup_config_file({"debug": True if debug=="y" else False, "training": False})
-        configObj = read_config_file()
-        camera = picamera.PiCamera()
-        # Capture 256*256 resolution images
-        camera.resolution = (256, 256)
         # Check if testing folder is present or not
         if not os.path.exists(os.path.join(os.getcwd(), "images")):
             os.mkdir(os.path.join(os.getcwd(), "images"))
         if not os.path.exists(os.path.join(os.getcwd(), "images", "testing")):
             os.mkdir(os.path.join(os.getcwd(), "images", "testing"))
-        camera.start_preview()
-        time.sleep(2)
-        text = None
-        while text != "":
-            text = input("Hit Enter to capture image\n")
-        if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
-        camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
-        camera.stop_preview()
-        return True
+        replace = "y"
+        if os.path.exists(os.path.join(os.getcwd(), "images", "testing". imageName)):
+            while replace not in ["y", "n"]:
+                replace = input("Image is present. Do you want to overwrite it? (Y/N)\n").lower()
+        if replace == "y":
+            setup_config_file({"debug": True if debug=="y" else False, "training": False})
+            configObj = read_config_file()
+            camera = picamera.PiCamera()
+            # Capture 256*256 resolution images
+            camera.resolution = (256, 256)
+            camera.start_preview()
+            time.sleep(2)
+            text = None
+            while text != "":
+                text = input("Hit Enter to capture image\n")
+            if configObj["debug"]: sys.stdout.write("Writing images to: {}\n".format(os.path.join(os.getcwd(), "images", "testing", imageName)))
+            camera.capture(os.path.join(os.getcwd(), "images", "testing", imageName))
+            camera.stop_preview()
+            return True
     except Exception as e:
         sys.stderr.write("Error from capture_images: {}\n".format(e))
     return False
@@ -306,8 +312,16 @@ if __name__ == "__main__":
 
     choice = 1
     while(choice):
-        choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0: Exit\n"))
+        # Cheking if OS is Raspberry PI
+        if os.uname()[4][:3] == "arm":
+            choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0: Exit\n"))
+        else:
+            choice = int(input("2: Training the Model \n3: Testing the Model\n0: Exit\n"))
         if choice == 1:
+            # Cheking if OS is not Raspberry PI then capturing photo is not allowed
+            if os.uname()[4][:3] != "arm":
+                sys.stderr.write("Option only supported on Raspberry PI\n")
+                continue
             debug = ""
             while (debug not in ["y", "n"]):
                 debug = input("Enter Debug Mode (Y/N):  ").lower()

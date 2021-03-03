@@ -1,11 +1,11 @@
-#!/usr/bin/env	python3.7
+#!/usr/bin/env	python3
 
-# import picamera
+import picamera
 import os
 import sys
 import time
 import cv2
-# from gpiozero import LED
+from gpiozero import LED
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file

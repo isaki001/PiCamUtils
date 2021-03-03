@@ -1,16 +1,16 @@
-#!/usr/bin/env	python3
+#!/usr/bin/env	python3.7
 
-import picamera
+# import picamera
 import os
 import sys
 import time
 import cv2
-from gpiozero import LED
+# from gpiozero import LED
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file
 
-
+print(os.uname())
 def capture_images(imageName, debug):
     """
     Function to capture images from PI camera
@@ -103,14 +103,17 @@ def test_images(imageName, debug):
 
     """
     try:
-        if not os.path.exists(os.path.join(os.getcwd(), "images", "training", imageName)):
+        print(os.path.join(os.getcwd(), "images", "testing", imageName))
+        if not os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             raise Exception("Testing image not present")
+        if not os.path.exists(os.path.join(os.getcwd(), "configuration", "config")):
+            setup_config_file({"debug": True if debug=="y" else False, "training": False})
         configObj = read_config_file()
         configObj["debug"] = True if debug == "y" else False
         configObj["training"] = False
         if configObj["debug"]: sys.stdout.write("Config: {}\n".format(configObj))
         if configObj["waterHeightLow"] == -1:
-            print("Train your model and then test it")
+            raise Exception("Train your model!!!")
         level = measure_flooding_level(imageName, configObj)
         if level["led"] == "red":
             redPin = LED(configObj["redled"])
@@ -129,7 +132,10 @@ def test_images(imageName, debug):
             greenPin.off()
         return True
     except Exception as e:
-        sys.stderr.write("Error from test_images: {}\n".format(e))
+        if str(e) == "name 'LED' is not defined":
+            sys.stderr.write("Flooding Level: {}\n".format(level))
+        else:
+            sys.stderr.write("Error from test_images: {}\n".format(e))
     return False
 
 

@@ -31,7 +31,7 @@ def capture_images(imageName, debug):
         if not os.path.exists(os.path.join(os.getcwd(), "images", "testing")):
             os.mkdir(os.path.join(os.getcwd(), "images", "testing"))
         replace = "y"
-        if os.path.exists(os.path.join(os.getcwd(), "images", "testing". imageName)):
+        if os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             while replace not in ["y", "n"]:
                 replace = input("Image is present. Do you want to overwrite it? (Y/N)\n").lower()
         if replace == "y":

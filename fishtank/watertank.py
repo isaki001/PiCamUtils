@@ -112,7 +112,7 @@ def test_images(imageName, debug):
 
     """
     try:
-        print(os.path.join(os.getcwd(), "images", "testing", imageName))
+        imageName += ".jpg"
         if not os.path.exists(os.path.join(os.getcwd(), "images", "testing", imageName)):
             raise Exception("Testing image not present")
         if not os.path.exists(os.path.join(os.getcwd(), "configuration", "config")):
@@ -316,36 +316,40 @@ if __name__ == "__main__":
     choice = 1
     while(choice):
         # Cheking if OS is Raspberry PI
-        if os.uname()[4][:3] == "arm":
-            choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0: Exit\n"))
-        else:
-            choice = int(input("2: Training the Model \n3: Testing the Model\n0: Exit\n"))
-        if choice == 1:
-            # Cheking if OS is not Raspberry PI then capturing photo is not allowed
-            if os.uname()[4][:3] != "arm":
-                sys.stderr.write("Option only supported on Raspberry PI\n")
-                continue
-            debug = ""
-            while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ").lower()
-                if debug.lower() not in ["y", "n"]:
-                    print("Enter valid debug choice")
-            imageName = input("Enter Image Name:  ")
-            capture_images(imageName, debug)
-        elif choice == 2:
-            debug = ""
-            while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ").lower()
-                if debug.lower() not in ["y", "n"]:
-                    print("Enter valid debug choice")
-            train_images(debug)
-        elif choice == 3:
-            debug = ""
-            while (debug not in ["y", "n"]):
-                debug = input("Enter Debug Mode (Y/N):  ").lower()
-                if debug.lower() not in ["y", "n"]:
-                    print("Enter valid debug choice")
-            imageName = input("Enter Image Name from the testing folder:  ")
-            test_images(imageName, debug)
-        elif choice != 0:
-            print("Wrong Choice")
+        try:
+            if os.uname()[4][:3] == "arm":
+                choice = int(input("1: Capture Image \n2: Training the Model \n3: Testing the Model\n0: Exit\n"))
+            else:
+                choice = int(input("2: Training the Model \n3: Testing the Model\n0: Exit\n"))
+            if choice == 1:
+                # Cheking if OS is not Raspberry PI then capturing photo is not allowed
+                if os.uname()[4][:3] != "arm":
+                    sys.stderr.write("Option only supported on Raspberry PI\n")
+                    continue
+                debug = ""
+                while (debug not in ["y", "n"]):
+                    debug = input("Enter Debug Mode (Y/N):  ").lower()
+                    if debug.lower() not in ["y", "n"]:
+                        print("Enter valid debug choice")
+                imageName = input("Enter Image Name:  ")
+                capture_images(imageName, debug)
+            elif choice == 2:
+                debug = ""
+                while (debug not in ["y", "n"]):
+                    debug = input("Enter Debug Mode (Y/N):  ").lower()
+                    if debug.lower() not in ["y", "n"]:
+                        print("Enter valid debug choice")
+                train_images(debug)
+            elif choice == 3:
+                debug = ""
+                while (debug not in ["y", "n"]):
+                    debug = input("Enter Debug Mode (Y/N):  ").lower()
+                    if debug.lower() not in ["y", "n"]:
+                        print("Enter valid debug choice")
+                imageName = input("Enter Image Name from the testing folder:  ")
+                test_images(imageName, debug)
+            elif choice != 0:
+                print("Wrong Choice")
+        except ValueError as e:
+            sys.stderr.write("Options Value Error: {}\n".format(e))
+            choice = 1

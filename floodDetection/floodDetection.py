@@ -165,7 +165,7 @@ def convert_to_greyscale(image_path, debug):
     Returns:
         img (image): OpenCV image type
     """
-    if not os.path.exists(os.path.join(os.getcwd(), "images", "intermediate"))
+    if not os.path.exists(os.path.join(os.getcwd(), "images", "intermediate")):
         os.mkdir(os.path.join(os.getcwd(), "images", "intermediate"))
 
     img = cv2.imread(image_path)

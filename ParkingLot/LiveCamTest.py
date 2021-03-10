@@ -1,16 +1,21 @@
-import PiCamUtil
 from gpiozero import LED
 import time
+import sys
+sys.path.insert(0, '../Utils/')
+import PixelUtils as PU
+import ImageProcessingUtils as IPU
+import PiCamUtil
 
-empty = PiCamUtil.pngToGrayArray("big_empty.png")
-#half_full = PiCamUtil.pngToGrayArray("Images/half_full.png")
+empty = IPU.pngToGrayArray("Images/big_empty.png")
 
-test = PiCamUtil.Collection(10, 'demoConfig.csv')
+test = PU.PixelBlockSetCollection(10, 'demoConfig.csv')
 test.SetMaxAllowedDiffForEmpty(500)
-verbose = True
+
+verbose = False
 led = LED(15)
+
 while(True):
-    current = PiCamUtil.GetGrayscale2D("currentFull")
+    current = PiCamUtil.GetGrayscale2D("Images/current")
     numEmpty = test.CompareImgs(empty, current, verbose)
     print("Available spots ",numEmpty) 
 

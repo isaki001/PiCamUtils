@@ -12,9 +12,6 @@ Supporting software for Rasberry Pi image processing projects at Old Dominion Un
 https://projects.raspberrypi.org/en/projects/getting-started-with-picamera  
 https://pypi.org/project/Pillow/
 
-# WaterTank
+# Flood Alarm System Using Raspberry PI
 
-## Dependencies
-* scipy
-* scikit-image
-* imutils
+

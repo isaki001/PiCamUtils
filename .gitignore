@@ -1,0 +1,5 @@
+.nfs*
+__pycache__/
+**/Fishtank*.jpg
+floodDetection/images/intermediate/*
+floodDetection/configuration/config

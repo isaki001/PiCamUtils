@@ -2,13 +2,18 @@ import PiCamUtil
 import numpy as np
 
 def DisplayCurrentConfig(imgGrayArray, configFile):
-    test = PiCamUtil.Collection(4, configFile)
-    #test.Sets[0].DisplayConfigurationBounds(imgGrayArray)
+    test = PiCamUtil.Collection(10, configFile)
+    
     test.Sets[0].DisplayConfigurationBounds(imgGrayArray)
     test.Sets[1].DisplayConfigurationBounds(imgGrayArray)
     test.Sets[2].DisplayConfigurationBounds(imgGrayArray)
     test.Sets[3].DisplayConfigurationBounds(imgGrayArray)
-   
+    test.Sets[4].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[5].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[6].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[7].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[8].DisplayConfigurationBounds(imgGrayArray)
+    test.Sets[9].DisplayConfigurationBounds(imgGrayArray)
 
 
 def ConfigHelper(testingImg):
@@ -52,7 +57,14 @@ def ConfigHelper(testingImg):
 #led.off()
 
 empty = PiCamUtil.GetGrayscale2D("big_empty")
-DisplayCurrentConfig(empty, "realConfig.csv")            
+#DisplayCurrentConfig(empty, "realConfig.csv")            
+DisplayCurrentConfig(empty, "demoConfig.csv")
+
+
+
+
+
+
 #empty = PiCamUtil.pngToGrayArray("Images/empty.png")
 #half_full = PiCamUtil.pngToGrayArray("Images/half_full.png")
 

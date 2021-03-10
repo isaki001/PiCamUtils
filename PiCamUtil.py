@@ -161,7 +161,7 @@ class Collection:
                col = set.pslot_origins[i,1]
                length = set.pSlotLength
                width = set.pSlotWidth
-
+               print("row ", i, row, col, length, width)
                spot_current_img = current[row:row + length, col:col + width]
                spot_ref_img = empty[row:row + length, col:col + width]
                
@@ -179,7 +179,11 @@ class Collection:
                    
                if(total_pixel_diff < self.threshold):
                    numEmpty = numEmpty +1
-                   
+               #else:
+                   #if(i == 2):
+                   #    DisplayImgArray(spot_ref_img)
+                   #    DisplayImgArray(spot_current_img)
+                           
        return numEmpty
    
     Sets = []       

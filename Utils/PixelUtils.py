@@ -134,6 +134,34 @@ class PixelBlockSetCollection:
                    numEmpty = numEmpty +1                                     
        return numEmpty
    
+    # returns an array for each PixelBlock, with a 1 if its empty, and a zero otherwise
+    def GetImageDiffs(self, empty, current):
+       StatusEmpty = []
+       pixelBlockStatus = 1
+       for set in self.Sets:
+           for i in range(0, set.numPspots):
+               row = set.pslot_origins[i,0]
+               col = set.pslot_origins[i,1]
+               length = set.length
+               width = set.width
+
+               spot_current_img = current[row:row + length, col:col + width]
+               spot_ref_img = empty[row:row + length, col:col + width]
+                      
+               spot_diffs = np.subtract(spot_current_img, spot_ref_img)
+               spot_diffs = np.absolute(spot_diffs)
+        
+               total_pixel_diff = np.sum(spot_diffs)
+                                
+               if(total_pixel_diff < self.threshold):
+                    pixelBlockStatus = 1
+               else:
+                    pixelBlockStatus = 0
+               StatusEmpty.append(pixelBlockStatus)
+                                                        
+       return StatusEmpty
+   
+    
     def DisplayConfigurationBounds(self, imgArray):
         for set in self.Sets:
             set.MarkConfigurationBounds(imgArray)   

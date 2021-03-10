@@ -152,7 +152,7 @@ class PixelBlockSetCollection:
                spot_diffs = np.absolute(spot_diffs)
         
                total_pixel_diff = np.sum(spot_diffs)
-                                
+               print("Pixel diff", total_pixel_diff)                 
                if(total_pixel_diff < self.threshold):
                     pixelBlockStatus = 1
                else:

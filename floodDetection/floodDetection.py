@@ -1,4 +1,4 @@
-#!/usr/bin/env	python3.7
+#!/usr/bin/env	python3
 
 import os
 # Cheking if OS is Raspberry PI
@@ -8,7 +8,6 @@ if os.uname()[4][:3] == "arm":
 import sys
 import time
 import cv2
-import json
 
 from configmanagement import setup_config_file
 from configmanagement import read_config_file
@@ -98,7 +97,7 @@ def train_images(debug):
         trainingValues["training"] = True
         setup_config_file(trainingValues)
         configObj = read_config_file()
-        if configObj["debug"]: sys.stdout.write("Trained Config: \n{}\n".format(json.dumps(configObj), sort_keys=True, indent=4))
+        if configObj["debug"]: sys.stdout.write("Trained Config: {}\n".format(configObj))
         return True
     except Exception as e:
         sys.stderr.write("Error from train_images: {}\n".format(e))

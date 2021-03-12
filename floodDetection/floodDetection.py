@@ -198,7 +198,7 @@ def get_heights(img, debug):
         debug (bool): Debug Mode
 
     Returns:
-        image_height (int): Pixel value for height of image
+        (dict): {"land": pixel value (int), "water": pixel value (int), "base": pixel value (int), "top": pixel value (int)}
     """
     fishtank_top = -1
     tank_width = -1
@@ -261,6 +261,9 @@ def measure_flooding_level(image_name, configObj):
     Parameters:
         image_name (str): Image Name
         configObj (dict): Configuration Object
+
+    Returns:
+        (dict): return {"level": (str), "led": (str)}
     """
     if configObj["training"]:
         img = convert_to_greyscale(os.path.join(os.getcwd(), "images", "training", image_name), configObj["debug"])

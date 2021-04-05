@@ -48,26 +48,26 @@ $ ./watertank.py
 
 ## Truth Set of Testing Images
 
-Image Name| Water Level | LED Light
----------|------------|--------------- 
- testImage1.jpg           |  low-mid      |  green
- testImage2.jpg           |  low          |  green
- testImage3.jpg           |  empty        |  green
- testImage4.jpg           |  empty        |  green
- testImage5.jpg           |  low          |  green
- testImage6.jpg           |  mid          |  yellow
- testImage7.jpg           |  mid          |  yellow 
- testImage8.jpg           |  mid          |  yellow
- testImage9.jpg           |  mid-high     |  yellow
- testImage10.jpg          |  mid-high     |  yellow
- testImage11.jpg          |  mid-high     |  yellow
- testImage12.jpg          |  mid-high     |  yellow
- testImage13.jpg          |  high         |  red
- testImage14.jpg          |  high         |  red
- testImage17.jpg          |  > high       |  red
- testImage18.jpg          |  > high       |  red
- testImage19.jpg          |  > high       |  red
- testImage20.jpg          |  > high       |  red
- testImage21.jpg          |  > high       |  red
- testImage22.jpg          |  > high       |  red
- testImage23.jpg          |  > high       |  red
+Image Name| Water Level | Expected LED Light | Predicted LED Light | Pass/Fail
+---------|------------|---------------|---------------|---------------|--------------- 
+ testImage1.jpg           |  low-mid      |  green     |  green       |  Pass
+ testImage2.jpg           |  low          |  green     |  green       |  Pass
+ testImage3.jpg           |  empty        |  green     |  green       |  Pass
+ testImage4.jpg           |  empty        |  green     |  green       |  Pass
+ testImage5.jpg           |  low          |  green     |  green       |  Pass
+ testImage6.jpg           |  mid          |  yellow    |  yellow      |  Pass
+ testImage7.jpg           |  mid          |  yellow    |  yellow      |  Pass
+ testImage8.jpg           |  mid          |  yellow    |  yellow      |  Pass
+ testImage9.jpg           |  mid-high     |  yellow    |  yellow      |  Pass     
+ testImage10.jpg          |  mid-high     |  yellow    |  yellow      |  Pass  
+ testImage11.jpg          |  mid-high     |  yellow    |  yellow      |  Pass  
+ testImage12.jpg          |  mid-high     |  yellow    |  red         |  Fail  
+ testImage13.jpg          |  high         |  red       |  red         |  Pass  
+ testImage14.jpg          |  high         |  red       |  red         |  Pass  
+ testImage17.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage18.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage19.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage20.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage21.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage22.jpg          |  > high       |  red       |  red         |  Pass  
+ testImage23.jpg          |  > high       |  red       |  red         |  Pass 

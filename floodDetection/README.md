@@ -49,7 +49,7 @@ $ ./watertank.py
 ## Truth Set of Testing Images
 
 Image Name| Water Level | Expected LED Light | Predicted LED Light | Pass/Fail
----------|------------|---------------|---------------|---------------|--------------- 
+---------|------------|---------------|---------------|---------------
  testImage1.jpg           |  low-mid      |  green     |  green       |  Pass
  testImage2.jpg           |  low          |  green     |  green       |  Pass
  testImage3.jpg           |  empty        |  green     |  green       |  Pass

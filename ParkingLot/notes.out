@@ -1,0 +1,144 @@
+Steps
+1. Run LIveCamTest.py to save an .png image that captures the empty parking lot
+2. Make a configuration csv file with as many entries as you prefer
+3. Run ConfigTest.py to check how far off the current configuration csv file from aligning with each parking spot
+
+i.e. consider this config file
+numblocks, originRow, originCol, length, width, spaceAmongblocks
+5,40,55,27,10,4
+5,80,100,27,10,5
+
+which yields initialConfig.png
+
+After updating a bit, we see why this is not an easy practical problem.
+Unless the camera is at a perfectly straight angle, and unless the parking spot lines are all
+on the same angle and consistent amongst themselves, the pixel bounds displayed will not align perfectly.
+
+To make configuration easier, we add more blocks, allowing small inconsistencies
+among them different blocks to not be important.
+We can see an example at MoreBlocksNeeded.png
+
+Thus we add additional blocks of parking spots for the same rows
+The resulting config file is 10spotConfig.csv
+
+On an empty parking spots these are the reported differences(if verbose is set to True)
+('Difference in parking spot ', 0, 365.95200000000023)
+('Difference in parking spot ', 1, 379.30600000000027)
+('Difference in parking spot ', 2, 387.51400000000035)
+('Difference in parking spot ', 0, 225.10100000000008)
+('Difference in parking spot ', 1, 261.00399999999991)
+('Difference in parking spot ', 0, 339.44)
+('Difference in parking spot ', 1, 351.29400000000004)
+('Difference in parking spot ', 0, 277.02399999999994)
+('Difference in parking spot ', 1, 264.65800000000002)
+('Difference in parking spot ', 2, 257.95300000000003)
+('Available spots ', 10)
+
+Note that, the same experiment fails if the room is lit naturally, the variation of the lightintg is too great
+even from moment to moment reporting the following which displays data on two consecutive runs, seconds apart working under the same processs
+('Difference in parking spot ', 0, 16903.190999999999)
+('Difference in parking spot ', 1, 16197.892999999998)
+('Difference in parking spot ', 2, 14476.270999999999)
+('Difference in parking spot ', 0, 10262.683999999999)
+('Difference in parking spot ', 1, 9920.8100000000013)
+('Difference in parking spot ', 0, 17192.970999999998)
+('Difference in parking spot ', 1, 16736.114999999998)
+('Difference in parking spot ', 0, 13134.062999999998)
+('Difference in parking spot ', 1, 12693.259999999998)
+('Difference in parking spot ', 2, 12344.885999999997)
+('Available spots ', 0)
+('Difference in parking spot ', 0, 16744.248000000003)
+('Difference in parking spot ', 1, 16069.053000000002)
+('Difference in parking spot ', 2, 14296.253000000001)
+('Difference in parking spot ', 0, 10115.327999999998)
+('Difference in parking spot ', 1, 9834.5409999999993)
+('Difference in parking spot ', 0, 17162.438000000002)
+('Difference in parking spot ', 1, 16589.083999999999)
+('Difference in parking spot ', 0, 12997.5)
+('Difference in parking spot ', 1, 12602.109999999997)
+('Difference in parking spot ', 2, 12236.519999999997)
+('Available spots ', 0)
+
+With ten full spots the program successfully identifies the situation
+('Difference in parking spot ', 0, 6075.5980000000009)
+('Difference in parking spot ', 1, 7460.2089999999989)
+('Difference in parking spot ', 2, 5491.5779999999995)
+('Difference in parking spot ', 0, 8044.6309999999985)
+('Difference in parking spot ', 1, 4094.558)
+('Difference in parking spot ', 0, 4959.7159999999994)
+('Difference in parking spot ', 1, 7646.1029999999992)
+('Difference in parking spot ', 0, 6689.0410000000002)
+('Difference in parking spot ', 1, 8707.2939999999999)
+('Difference in parking spot ', 2, 10656.746999999999)
+('Available spots ', 0)
+('Difference in parking spot ', 0, 5990.2170000000006)
+('Difference in parking spot ', 1, 7656.0870000000004)
+('Difference in parking spot ', 2, 5202.5029999999988)
+('Difference in parking spot ', 0, 8393.866)
+('Difference in parking spot ', 1, 4028.4930000000004)
+('Difference in parking spot ', 0, 4810.137999999999)
+('Difference in parking spot ', 1, 7359.1299999999992)
+('Difference in parking spot ', 0, 6730.7199999999984)
+('Difference in parking spot ', 1, 8885.3040000000001)
+('Difference in parking spot ', 2, 10800.705999999998)
+('Available spots ', 0)
+
+As soon as we move one though
+
+('Difference in parking spot ', 0, 485.524)
+('Difference in parking spot ', 1, 9114.3580000000002)
+('Difference in parking spot ', 2, 4144.1739999999991)
+('Difference in parking spot ', 0, 6672.2299999999996)
+('Difference in parking spot ', 1, 11530.784)
+('Difference in parking spot ', 0, 7203.8799999999992)
+('Difference in parking spot ', 1, 6045.674)
+('Difference in parking spot ', 0, 3823.2419999999993)
+('Difference in parking spot ', 1, 4101.8359999999993)
+('Difference in parking spot ', 2, 9050.2659999999996)
+('Available spots ', 1)
+
+When we remove two
+('Difference in parking spot ', 0, 4930.9709999999995)
+('Difference in parking spot ', 1, 9245.9399999999987)
+('Difference in parking spot ', 2, 4372.3919999999998)
+('Difference in parking spot ', 0, 6589.8449999999993)
+('Difference in parking spot ', 1, 430.23600000000022)
+('Difference in parking spot ', 0, 7387.049)
+('Difference in parking spot ', 1, 6262.1299999999992)
+('Difference in parking spot ', 0, 3979.1169999999993)
+('Difference in parking spot ', 1, 3996.4659999999994)
+('Difference in parking spot ', 2, 478.84000000000003)
+('Available spots ', 2)
+
+When we remove 7
+('Difference in parking spot ', 0, 8650.0040000000008)
+('Difference in parking spot ', 1, 481.02400000000011)
+('Difference in parking spot ', 2, 474.59299999999985)
+('Difference in parking spot ', 0, 291.77599999999984)
+('Difference in parking spot ', 1, 10671.258)
+('Difference in parking spot ', 0, 413.48500000000001)
+('Difference in parking spot ', 1, 463.96300000000008)
+('Difference in parking spot ', 0, 328.06400000000019)
+('Difference in parking spot ', 1, 2865.3579999999997)
+('Difference in parking spot ', 2, 298.61200000000008)
+('Available spots ', 7)
+
+When trying to identify the threshold, check the difference between a very recent image and a current one
+with empty lot.
+
+with four cars present
+('Difference in parking spot ', 0, 8670.6540000000005)
+('Difference in parking spot ', 1, 603.73799999999983)
+('Difference in parking spot ', 2, 499.78799999999956)
+('Difference in parking spot ', 0, 320.43600000000015)
+('Difference in parking spot ', 1, 10747.067999999999)
+('Difference in parking spot ', 0, 508.26100000000008)
+('Difference in parking spot ', 1, 10348.369999999999)
+('Difference in parking spot ', 0, 341.64499999999987)
+('Difference in parking spot ', 1, 2871.4360000000001)
+('Difference in parking spot ', 2, 253.90900000000022)
+('Available spots ', 6)
+
+With four cars present
+
+
